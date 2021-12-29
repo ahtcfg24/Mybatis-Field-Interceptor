@@ -20,18 +20,15 @@
 如果自定义了MyBatis SessionFactory，还需要加入插件列表中
 ```Java
     @Bean
-    public SqlSessionFactory masterSqlSessionFactory() throws Exception {
-        
-        MybatisSqlSessionFactoryBean factoryBean = new MybatisSqlSessionFactoryBean();
-        
-				//xxxx 其它配置
-        
-				//添加FieldAccessInterceptor mybatis插件
-        Interceptor[] plugins = {fieldAccessInterceptor()};
+public SqlSessionFactory masterSqlSessionFactory()throws Exception{
+        MybatisSqlSessionFactoryBean factoryBean=new MybatisSqlSessionFactoryBean();
+        //xxxx 其它配置
+        //添加FieldAccessInterceptor mybatis插件
+        Interceptor[]plugins={fieldAccessInterceptor()};
         factoryBean.setPlugins(plugins);
-      
+
         return factoryBean.getObject();
-    }
+        }
 ```
 
 ## 三、注解使用说明
@@ -55,38 +52,39 @@
 @TableName(value = "admin_user")
 @Data
 public class AdminUserDO implements Serializable {
-    
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
 
-  	/**
-     * 需要加密存储，解密读取的字段，其中EncryptHandler是自定义实现了IFieldAccessHandler的类
-     */
-    @FieldAccess(handler = EncryptHandler.class)
-    @TableField(value = "password")
-    private String password;
+ @TableId(value = "id", type = IdType.AUTO)
+ private Long id;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+ /**
+  * 需要加密存储，解密读取的字段，其中EncryptHandler是自定义实现了IFieldAccessHandler的类
+  */
+ @FieldAccess(handler = EncryptHandler.class)
+ @TableField(value = "password")
+ private String password;
+
+ @TableField(exist = false)
+ private static final long serialVersionUID = 1L;
 }
 ```
 
 ### 3.3 @ModifyParamDependency
 该注解标记在Mybatis实体类的方法上，被该注解标记的方法，会在Mybatis写入数据库时先执行该方法，该方法返回true才会执行对应的handler逻辑。
 方法名可以任意取，返回值和入参列表格式必须如下：
+
 ```Java
     /**
-     * 判断是否需要在写入数据库前对该字段执行xxxxxHandler的逻辑
-     *
-     * @param obj 当前类要写入数据库的对象
-     * @param fieldName 被@FieldAccess(handler = xxxxxHandler.class)标记的字段名称
-     * @param fieldValue 被@FieldAccess(handler = xxxxxHandler.class)标记的字段值
-     */
-	  @ModifyParamDependency(xxxxxHandler.class)
-    public boolean allowExecuteXXXX(Object obj, String fieldName, Object fieldValue) {
-      	// todo 实现你自己的逻辑
+ * 判断是否需要在写入数据库前对该字段执行xxxxxHandler的逻辑
+ *
+ * @param obj 当前类要写入数据库的对象
+ * @param fieldName 被@FieldAccess(handler = xxxxxHandler.class)标记的字段名称
+ * @param fieldValue 被@FieldAccess(handler = xxxxxHandler.class)标记的字段值
+ */
+@ModifyParamDependency(xxxxxHandler.class)
+public boolean allowExecuteXXXX(Object obj,String fieldName,Object fieldValue){
+        // todo 实现你自己的逻辑
         return true;
-    }
+        }
 ```
 
 ### 3.4 @ModifyResultDependency
