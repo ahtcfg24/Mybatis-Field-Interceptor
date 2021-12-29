@@ -13,9 +13,9 @@
 如果是使用SpringBoot+MyBatis只需要创建一个FieldAccessInterceptor对象并加载为Spring的bean，如以下配置。
 ```Java
     @Bean
-    public FieldAccessInterceptor fieldAccessInterceptor() {
-        return new FieldAccessInterceptor("com.kuaishou.ad.xxx.do"); //注解的类所在的package路径，范围越小启动越快
-    }
+public FieldAccessInterceptor fieldAccessInterceptor(){
+        return new FieldAccessInterceptor("com.yourpackage.path.example.xxx"); //注解的类所在的package路径，范围越小启动越快
+        }
 ```
 如果自定义了MyBatis SessionFactory，还需要加入插件列表中
 ```Java
