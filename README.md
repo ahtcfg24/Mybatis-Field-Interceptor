@@ -6,7 +6,7 @@
 ## 二、配置说明
 2.1 导入Maven Jar包
 ```XML
-TODO
+暂时没有时间发中央仓库，可以自行拷贝源码到你的项目中
 ```
 
 2.2 创建FieldAccessInterceptor
